@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
-import joblib
+import json
+import xgboost as xgb
 import shap
 import matplotlib.pyplot as plt
 import os
@@ -25,14 +26,11 @@ st.set_page_config(
 
 @st.cache_resource
 def load_model():
+    model = xgb.XGBClassifier()
+    model.load_model("xgboost_sepsis_model.json")
 
-    model = joblib.load(
-        "xgboost_sepsis_model.pkl"
-    )
-
-    features = joblib.load(
-        "feature_names.pkl"
-    )
+    with open("feature_names.json", "r", encoding="utf-8") as f:
+        features = json.load(f)
 
     return model, features
 
@@ -456,23 +454,13 @@ with right:
 
 
 
-            booster = model.named_steps["model"]
-
-
-
-            X_trans = model.named_steps["imputer"].transform(
-                X
-            )
-
-
-
             explainer = shap.TreeExplainer(
-                booster
+                model
             )
 
 
             shap_values = explainer.shap_values(
-                X_trans
+                X
             )
 
 
@@ -490,7 +478,7 @@ with right:
 
                     base_values=explainer.expected_value,
 
-                    data=X_trans[0],
+                    data=X.iloc[0].to_numpy(),
 
                     feature_names=features
 
