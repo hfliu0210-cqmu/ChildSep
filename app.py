@@ -61,6 +61,45 @@ st.markdown(
 }
 
 
+.model-purpose {
+    background-color: #E8E8E8;
+    color: #C00000;
+    font-size: 22px;
+    font-weight: 700;
+    padding: 10px 14px;
+    margin: 18px 0 22px 0;
+    line-height: 1.35;
+}
+
+/* Refined two-tab palette: soft blue-gray with a deep teal active state. */
+div[data-testid="stTabs"] [data-baseweb="tab-list"] {
+    gap: 12px;
+    border-bottom: 1px solid #D9E4EC;
+}
+
+div[data-testid="stTabs"] button[role="tab"] {
+    background-color: #EEF3F7;
+    border: 1px solid #DCE6ED;
+    border-radius: 8px 8px 0 0;
+    color: #38566B;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 18px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+div[data-testid="stTabs"] button[role="tab"]:hover {
+    background-color: #E1EDF2;
+    color: #174E63;
+}
+
+div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
+    background-color: #174E63;
+    color: #FFFFFF;
+    border: 1px solid #174E63;
+    border-bottom: 3px solid #D7A85B;
+}
+
 .result-number {
 
     font-family:"Times New Roman";
@@ -150,9 +189,55 @@ else:
 
 
 
+# =====================================================
+# Model scope and study information
+# =====================================================
+
+st.markdown(
+    """
+    <div class="model-purpose">
+        This model aims to predict sepsis risk in children admitted for acute infection.
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# Two information modules: sepsis definition and development cohort.
+tab_sepsis, tab_cohort = st.tabs(
+    [
+        "Definition of sepsis",
+        "Introduction to the model development cohort"
+    ]
+)
+
+with tab_sepsis:
+    st.markdown("### Definition of sepsis")
+    st.write(
+        "In this study, sepsis was diagnosed according to the 2026 sepsis "
+        "guidelines for children. This study-defined outcome was used to classify "
+        "patients in the development cohort and train the prediction model. "
+        "The predicted probability is intended to support clinical assessment "
+        "and should not be interpreted as a standalone diagnosis."
+    )
+
+with tab_cohort:
+    st.markdown("### Introduction to the model development cohort")
+    st.write(
+        "The retrospective development cohort was assembled at the Children's "
+        "Hospital of Chongqing Medical University, the National Pediatric Clinical "
+        "Research Center in China. It included 25,426 children older than 28 days "
+        "and younger than 18 years who were admitted with acute infection during "
+        "2012–2025. Among them, 2,788 (11.0%) progressed to sepsis, while "
+        "22,638 (89.0%) did not."
+    )
+    st.write(
+        "Eight predictors were selected from 22 variables measured within 24 hours "
+        "of admission. Ten candidate machine-learning algorithms were compared, "
+        "and XGBoost was selected for the final model based on its overall "
+        "predictive performance and stability."
+    )
+
 st.divider()
-
-
 
 # =====================================================
 # Main layout
